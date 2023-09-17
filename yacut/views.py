@@ -9,7 +9,7 @@ from .models import URLMap
 from .constants import (
     FLASH_NAME_EXISTS,
     FLASH_SUCCESS,
-    UNIQUE_ID_LENGTH
+    SHORT_LENGTH
 )
 
 
@@ -20,7 +20,7 @@ def get_unique_short_id():
     """
     symbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     short_link = ''
-    for i in range(UNIQUE_ID_LENGTH):
+    for i in range(SHORT_LENGTH):
         short_link += symbols[randrange(len(symbols))]
     if URLMap.query.filter_by(short=short_link).first():
         return get_unique_short_id()
