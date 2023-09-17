@@ -45,18 +45,14 @@ def index_view():
             db.session.add(url_map)
             db.session.commit()
             flash(FLASH_SUCCESS, 'success_message')
-            flash(
-                url_for(
-                    'redirect_view',
-                    short_url=url_map.short,
-                    _external=True
-                ),
-                'success_message_url'
-            )
             return render_template(
                 'yacut.html',
                 form=form,
-                short_link=url_map.short
+                short_link=url_for(
+                    'redirect_view',
+                    short_url=url_map.short,
+                    _external=True
+                )
             )
         return render_template('yacut.html', form=form)
     except Exception:

@@ -11,3 +11,6 @@ class URLMap(db.Model):
         db.String(CUSTOM_ID_MAX_LENGTH), nullable=False, unique=True
     )
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def get(custom_id):
+        return URLMap.query.filter_by(short=custom_id).first()

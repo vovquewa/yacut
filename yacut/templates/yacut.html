@@ -53,15 +53,11 @@
                   {% if messages %}
                     {% for message in messages %}
                       {{ message }}
-                      {% with messages = get_flashed_messages(category_filter = ['success_message_url']) %}
-                        {% if messages %}
-                          {% for message in messages %}
-                            <p>
-                              <a href="{{ message }}">{{ message }}</a>
-                            </p>
-                          {% endfor %}
-                        {% endif %}
-                      {% endwith %}
+                      {% if short_link %}
+                        <p>
+                          <a href="{{ short_link }}">{{ short_link }}</a>
+                        </p>
+                      {% endif %}
                     {% endfor %}
                   {% endif %}
                 {% endwith %}
