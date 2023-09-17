@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 {% block content %}
   <main>
     <section class="container my-5 px-4">
@@ -14,23 +14,19 @@
               <div>
                 <div>
                   {{ form.original_link(class = 'form-control form-control-lg py-2 mb-3', id = 'form-title', placeholder = form.original_link.label.text) }}
-                  {% if form.original_link.errors %}
-                    {% for error in form.original_link.errors %}
-                      <p>
-                        <span style="color:red">{{ error }}</span>
-                      </p>
-                    {% endfor %}
-                  {% endif %}
+                  {% for error in form.original_link.errors %}
+                    <p>
+                      <span style="color:red">{{ error }}</span>
+                    </p>
+                  {% endfor %}
                 </div>
                 <div>
                   {{ form.custom_id(class = 'form-control form-control-lg py-2 mb-3', id = 'form-title', placeholder = form.custom_id.label.text) }}
-                  {% if form.custom_id.errors %}
-                    {% for error in form.custom_id.errors %}
-                      <p>
-                        <span style="color:red">{{ error }}</span>
-                      </p>
-                    {% endfor %}
-                  {% endif %}
+                  {% for error in form.custom_id.errors %}
+                    <p>
+                      <span style="color:red">{{ error }}</span>
+                    </p>
+                  {% endfor %}
                 </div>
                 {{ form.submit(class = 'btn btn-primary') }}
               </div>
@@ -53,7 +49,6 @@
                     {% endfor %}
                   {% endif %}
                 {% endwith %}
-
                 {% with messages = get_flashed_messages(category_filter = ['success_message']) %}
                   {% if messages %}
                     {% for message in messages %}
