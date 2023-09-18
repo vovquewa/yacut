@@ -3,10 +3,12 @@ from http import HTTPStatus
 from flask import abort, flash, redirect, render_template, url_for
 
 from . import app
-from .constants import FLASH_NAME_EXISTS, REDIRECT_VIEW
+from .constants import REDIRECT_VIEW
 from .exceptions import AddShortException
 from .forms import CutForm
 from .models import URLMap
+
+NAME_EXISTS = 'Имя {} уже занято!'
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -14,7 +16,7 @@ def index_view():
     form = CutForm()
     if URLMap.get(custom_id=form.custom_id.data) is not None:
         flash(
-            FLASH_NAME_EXISTS.format(form.custom_id.data)
+            NAME_EXISTS.format(form.custom_id.data)
         )
         return render_template('index.html', form=form)
     if form.validate_on_submit():

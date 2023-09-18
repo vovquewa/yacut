@@ -8,16 +8,16 @@ from .error_handlers import InvalidAPIUsage
 from .exceptions import AddShortException
 from .models import URLMap
 
-API_ID_NOT_FOUND = 'Указанный id не найден'
-API_BODY_NOT_FOUND = 'Отсутствует тело запроса'
-API_URL_REQUIRED = '"url" является обязательным полем!'
+ID_NOT_FOUND = 'Указанный id не найден'
+BODY_NOT_FOUND = 'Отсутствует тело запроса'
+URL_REQUIRED = '"url" является обязательным полем!'
 
 
 @app.route('/api/id/<short>/', methods=['GET'])
 def get_url(short):
     url_map = URLMap.get(custom_id=short)
     if url_map is None:
-        raise InvalidAPIUsage(API_ID_NOT_FOUND, HTTPStatus.NOT_FOUND)
+        raise InvalidAPIUsage(ID_NOT_FOUND, HTTPStatus.NOT_FOUND)
     return jsonify(
         {
             'url': url_map.original
@@ -29,9 +29,9 @@ def get_url(short):
 def add_url():
     data = request.get_json()
     if not data:
-        raise InvalidAPIUsage(API_BODY_NOT_FOUND)
+        raise InvalidAPIUsage(BODY_NOT_FOUND)
     if 'url' not in data or not data.get('url'):
-        raise InvalidAPIUsage(API_URL_REQUIRED)
+        raise InvalidAPIUsage(URL_REQUIRED)
     try:
         url_map = URLMap.add(
             original=data['url'],

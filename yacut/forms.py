@@ -2,8 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional, Regexp
 
-from .constants import (CUSTOM_ID_MAX_LENGTH, ORIGINAL_MAX_LENGTH, API_REGEX,
-                        FLASH_NAME_EXISTS)
+from .constants import (CUSTOM_ID_MAX_LENGTH, ORIGINAL_MAX_LENGTH, API_REGEX)
 from .models import URLMap
 from .exceptions import ValidationError
 
@@ -13,6 +12,7 @@ FORMS_REQUIRED = 'Обязательное поле'
 FORMS_YOUR_SHORT_LINK = 'Ваш вариант короткой ссылки'
 FORMS_SHORT_LINK_VALIDATION = 'Короткая ссылка может быть не более 16 символов'
 FORMS_CREATE = 'Создать'
+FLASH_NAME_EXISTS = 'Имя {} уже занято!'
 
 
 class CutForm(FlaskForm):

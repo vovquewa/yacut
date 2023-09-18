@@ -5,10 +5,13 @@ from string import ascii_letters, digits
 
 from yacut import db
 
-from .constants import (API_INVALID_SHORT, API_NAME_EXISTS, API_REGEX,
-                        API_SHORT_FAILED, CUSTOM_ID_MAX_LENGTH, MAX_ATTEMPTS,
+from .constants import (API_REGEX, CUSTOM_ID_MAX_LENGTH, MAX_ATTEMPTS,
                         ORIGINAL_MAX_LENGTH, SHORT_LENGTH)
 from .error_handlers import InvalidAPIUsage
+
+NVALID_SHORT = 'Указано недопустимое имя для короткой ссылки'
+SHORT_FAILED = 'Не удалось сгенерировать уникальный id'
+NAME_EXISTS = 'Имя "{}" уже занято.'
 
 
 class URLMap(db.Model):
@@ -28,7 +31,7 @@ class URLMap(db.Model):
             if URLMap.get(custom_id=short_link):
                 return URLMap.get_unique_short_id()
             return short_link
-        raise InvalidAPIUsage(API_SHORT_FAILED)
+        raise InvalidAPIUsage(SHORT_FAILED)
 
     def get(custom_id):
         return URLMap.query.filter_by(short=custom_id).first()
@@ -42,11 +45,11 @@ class URLMap(db.Model):
                 not bool(re.match(regex, short))
             )
         ):
-            raise InvalidAPIUsage(API_INVALID_SHORT)
+            raise InvalidAPIUsage(NVALID_SHORT)
 
         if URLMap.get(custom_id=short):
             raise InvalidAPIUsage(
-                API_NAME_EXISTS.format(short)
+                NAME_EXISTS.format(short)
             )
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
