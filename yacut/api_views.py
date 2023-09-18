@@ -43,7 +43,7 @@ def add_url():
         {
             'url': url_map.original,
             'short_link': url_for(
-                REDIRECT_VIEW, short_url=short, _external=True
+                REDIRECT_VIEW, short=short, _external=True
             )
         }
     ), HTTPStatus.CREATED

@@ -30,16 +30,16 @@ def index_view():
             form=form,
             short_link=url_for(
                 REDIRECT_VIEW,
-                short_url=url_map.short,
+                short=url_map.short,
                 _external=True
             )
         )
     return render_template('index.html', form=form)
 
 
-@app.route('/<short_url>')
-def redirect_view(short_url):
-    url_map = URLMap.get(custom_id=short_url)
+@app.route('/<short>')
+def redirect_view(short):
+    url_map = URLMap.get(custom_id=short)
     if url_map is None:
         abort(HTTPStatus.NOT_FOUND)
     return redirect(url_map.original)
