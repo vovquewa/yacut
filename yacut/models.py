@@ -25,12 +25,12 @@ class URLMap(db.Model):
     def get_unique_short_id(attempts=0):
         if attempts <= MAX_ATTEMPTS:
             symbols = ascii_letters + digits
-            short_link = ''.join(
+            short = ''.join(
                 choice(symbols) for _ in range(SHORT_LENGTH)
             )
-            if URLMap.get(custom_id=short_link):
+            if URLMap.get(custom_id=short):
                 return URLMap.get_unique_short_id()
-            return short_link
+            return short
         raise InvalidAPIUsage(SHORT_FAILED)
 
     def get(custom_id):
