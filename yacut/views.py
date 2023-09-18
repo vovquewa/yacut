@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, redirect, render_template, url_for
 
 from . import app
 from .constants import REDIRECT_VIEW
@@ -14,29 +14,24 @@ NAME_EXISTS = 'Имя {} уже занято!'
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
     form = CutForm()
-    if URLMap.get(short=form.custom_id.data) is not None:
-        flash(
-            NAME_EXISTS.format(form.custom_id.data)
-        )
+    if not form.validate_on_submit():
         return render_template('index.html', form=form)
-    if form.validate_on_submit():
-        try:
-            url_map = URLMap.add(
-                original=form.original_link.data,
-                short=form.custom_id.data or URLMap.get_unique_short()
-            )
-        except AddShortException as e:
-            abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
-        return render_template(
-            'index.html',
-            form=form,
-            short_link=url_for(
-                REDIRECT_VIEW,
-                short=url_map.short,
-                _external=True
-            )
+    try:
+        url_map = URLMap.add(
+            original=form.original_link.data,
+            short=form.custom_id.data
         )
-    return render_template('index.html', form=form)
+    except AddShortException as e:
+        abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
+    return render_template(
+        'index.html',
+        form=form,
+        short_link=url_for(
+            REDIRECT_VIEW,
+            short=url_map.short,
+            _external=True
+        )
+    )
 
 
 @app.route('/<short>')

@@ -1,9 +1,10 @@
 from http import HTTPStatus
+import re
 
 from flask import abort, jsonify, request, url_for
 
 from . import app
-from .constants import REDIRECT_VIEW
+from .constants import REDIRECT_VIEW, API_REGEX, SHORT_MAX_LENGTH
 from .error_handlers import InvalidAPIUsage
 from .exceptions import AddShortException
 from .models import URLMap
@@ -11,6 +12,8 @@ from .models import URLMap
 ID_NOT_FOUND = 'Указанный id не найден'
 BODY_NOT_FOUND = 'Отсутствует тело запроса'
 URL_REQUIRED = '"url" является обязательным полем!'
+NVALID_SHORT = 'Указано недопустимое имя для короткой ссылки'
+NAME_EXISTS = 'Имя "{}" уже занято.'
 
 
 @app.route('/api/id/<short>/', methods=['GET'])
@@ -33,12 +36,25 @@ def add_url():
     if 'url' not in data or not data.get('url'):
         raise InvalidAPIUsage(URL_REQUIRED)
     try:
+        short = (
+            URLMap.get_unique_short()
+            if not data.get('custom_id') else data.get('custom_id')
+        )
+        if (
+            short and
+            (
+                len(short) > SHORT_MAX_LENGTH or
+                not re.match(API_REGEX, short)
+            )
+        ):
+            raise InvalidAPIUsage(NVALID_SHORT)
+        if URLMap.get(short=short):
+            raise InvalidAPIUsage(
+                NAME_EXISTS.format(short)
+            )
         url_map = URLMap.add(
             original=data['url'],
-            short=(
-                URLMap.get_unique_short()
-                if not data.get('custom_id') else data.get('custom_id')
-            )
+            short=short
         )
     except AddShortException as e:
         abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))

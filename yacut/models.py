@@ -1,17 +1,17 @@
-import re
 from datetime import datetime
 from random import choice
 from string import ascii_letters, digits
 
 from yacut import db
 
-from .constants import (API_REGEX, SHORT_MAX_LENGTH, MAX_ATTEMPTS,
-                        ORIGINAL_MAX_LENGTH, SHORT_LENGTH)
+from .constants import (
+    SHORT_MAX_LENGTH, MAX_ATTEMPTS,
+    ORIGINAL_MAX_LENGTH, SHORT_LENGTH
+)
 from .error_handlers import InvalidAPIUsage
 
-NVALID_SHORT = 'Указано недопустимое имя для короткой ссылки'
 SHORT_FAILED = 'Не удалось сгенерировать уникальный id'
-NAME_EXISTS = 'Имя "{}" уже занято.'
+SHORT_UNACCEPTABLE = 'Указано недопустимое имя для короткой ссылки'
 
 
 class URLMap(db.Model):
@@ -35,20 +35,11 @@ class URLMap(db.Model):
     def get(short):
         return URLMap.query.filter_by(short=short).first()
 
-    def add(original, short):
-        if (
-            short and
-            (
-                len(short) > SHORT_MAX_LENGTH or
-                not re.match(API_REGEX, short)
-            )
-        ):
-            raise InvalidAPIUsage(NVALID_SHORT)
-
-        if URLMap.get(short=short):
-            raise InvalidAPIUsage(
-                NAME_EXISTS.format(short)
-            )
+    def add(original, short=None):
+        if short is None or short == '':
+            short = URLMap.get_unique_short()
+        if len(short) > SHORT_MAX_LENGTH:
+            raise InvalidAPIUsage(SHORT_UNACCEPTABLE)
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
         db.session.commit()

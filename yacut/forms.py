@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, Length, Optional, Regexp
+from wtforms.validators import (
+    DataRequired, Length, Optional, Regexp,
+    ValidationError
+)
 
-from .constants import (SHORT_MAX_LENGTH, ORIGINAL_MAX_LENGTH, API_REGEX)
+from .constants import API_REGEX, ORIGINAL_MAX_LENGTH, SHORT_MAX_LENGTH
 from .models import URLMap
-from .exceptions import ValidationError
-
 
 FORMS_LONG_LINK = 'Длинная ссылка'
 FORMS_REQUIRED = 'Обязательное поле'
@@ -39,7 +40,7 @@ class CutForm(FlaskForm):
 
     def validate_custom_id(self, field):
         if field.data:
-            if URLMap.get(short=field.data) is not None:
+            if URLMap.get(short=field.data):
                 raise ValidationError(
                     FLASH_NAME_EXISTS.format(field.data)
                 )

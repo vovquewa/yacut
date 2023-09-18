@@ -85,3 +85,17 @@ Commands:
   run     Run a development server.
   shell   Run a shell in the app context.
 ```
+
+## Настройка базы данных
+
+```bash
+flask db init
+```
+
+```bash
+flask db migrate -m "Initial migration."
+```
+
+```bash
+flask db upgrade
+```
