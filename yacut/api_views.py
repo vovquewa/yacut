@@ -12,9 +12,9 @@ API_BODY_NOT_FOUND = 'Отсутствует тело запроса'
 API_URL_REQUIRED = '"url" является обязательным полем!'
 
 
-@app.route('/api/id/<short_url>/', methods=['GET'])
-def get_url(short_url):
-    url_map = URLMap.get(custom_id=short_url)
+@app.route('/api/id/<short>/', methods=['GET'])
+def get_url(short):
+    url_map = URLMap.get(custom_id=short)
     if url_map is None:
         raise InvalidAPIUsage(API_ID_NOT_FOUND, HTTPStatus.NOT_FOUND)
     return jsonify(
