@@ -36,7 +36,7 @@ def add_url():
         url_map = URLMap.add(
             original=data['url'],
             short=(
-                URLMap.get_unique_short_id()
+                URLMap.get_unique_short()
                 if not data.get('custom_id') else data.get('custom_id')
             )
         )

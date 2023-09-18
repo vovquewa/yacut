@@ -23,7 +23,7 @@ def index_view():
         try:
             url_map = URLMap.add(
                 original=form.original_link.data,
-                short=form.custom_id.data or URLMap.get_unique_short_id()
+                short=form.custom_id.data or URLMap.get_unique_short()
             )
         except AddShortException as e:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))

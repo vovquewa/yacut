@@ -5,7 +5,7 @@ from string import ascii_letters, digits
 
 from yacut import db
 
-from .constants import (API_REGEX, CUSTOM_ID_MAX_LENGTH, MAX_ATTEMPTS,
+from .constants import (API_REGEX, SHORT_MAX_LENGTH, MAX_ATTEMPTS,
                         ORIGINAL_MAX_LENGTH, SHORT_LENGTH)
 from .error_handlers import InvalidAPIUsage
 
@@ -18,18 +18,18 @@ class URLMap(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     original = db.Column(db.String(ORIGINAL_MAX_LENGTH), nullable=False)
     short = db.Column(
-        db.String(CUSTOM_ID_MAX_LENGTH), nullable=False, unique=True
+        db.String(SHORT_MAX_LENGTH), nullable=False, unique=True
     )
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    def get_unique_short_id(attempts=0):
+    def get_unique_short(attempts=0):
         if attempts <= MAX_ATTEMPTS:
             symbols = ascii_letters + digits
             short = ''.join(
                 choice(symbols) for _ in range(SHORT_LENGTH)
             )
             if URLMap.get(custom_id=short):
-                return URLMap.get_unique_short_id()
+                return URLMap.get_unique_short()
             return short
         raise InvalidAPIUsage(SHORT_FAILED)
 
@@ -41,7 +41,7 @@ class URLMap(db.Model):
         if (
             short and
             (
-                len(short) > CUSTOM_ID_MAX_LENGTH or
+                len(short) > SHORT_MAX_LENGTH or
                 not bool(re.match(regex, short))
             )
         ):

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional, Regexp
 
-from .constants import (CUSTOM_ID_MAX_LENGTH, ORIGINAL_MAX_LENGTH, API_REGEX)
+from .constants import (SHORT_MAX_LENGTH, ORIGINAL_MAX_LENGTH, API_REGEX)
 from .models import URLMap
 from .exceptions import ValidationError
 
@@ -26,7 +26,7 @@ class CutForm(FlaskForm):
         validators=[
             Optional(),
             Length(
-                max=CUSTOM_ID_MAX_LENGTH,
+                max=SHORT_MAX_LENGTH,
                 message=FORMS_SHORT_LINK_VALIDATION
             ),
             Regexp(
