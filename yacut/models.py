@@ -23,26 +23,24 @@ class URLMap(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def get_unique_short(attempts=0):
-        if attempts <= MAX_ATTEMPTS:
+        for _ in range(MAX_ATTEMPTS):
             symbols = ascii_letters + digits
             short = ''.join(
                 choice(symbols) for _ in range(SHORT_LENGTH)
             )
-            if URLMap.get(short=short):
-                return URLMap.get_unique_short()
-            return short
+            if not URLMap.get(short=short):
+                return short
         raise InvalidAPIUsage(SHORT_FAILED)
 
     def get(short):
         return URLMap.query.filter_by(short=short).first()
 
     def add(original, short):
-        regex = API_REGEX
         if (
             short and
             (
                 len(short) > SHORT_MAX_LENGTH or
-                not bool(re.match(regex, short))
+                not re.match(API_REGEX, short)
             )
         ):
             raise InvalidAPIUsage(NVALID_SHORT)
