@@ -15,7 +15,7 @@ URL_REQUIRED = '"url" является обязательным полем!'
 
 @app.route('/api/id/<short>/', methods=['GET'])
 def get_url(short):
-    url_map = URLMap.get(custom_id=short)
+    url_map = URLMap.get(short=short)
     if url_map is None:
         raise InvalidAPIUsage(ID_NOT_FOUND, HTTPStatus.NOT_FOUND)
     return jsonify(

@@ -14,7 +14,7 @@ NAME_EXISTS = 'Имя {} уже занято!'
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
     form = CutForm()
-    if URLMap.get(custom_id=form.custom_id.data) is not None:
+    if URLMap.get(short=form.custom_id.data) is not None:
         flash(
             NAME_EXISTS.format(form.custom_id.data)
         )
@@ -41,7 +41,7 @@ def index_view():
 
 @app.route('/<short>')
 def redirect_view(short):
-    url_map = URLMap.get(custom_id=short)
+    url_map = URLMap.get(short=short)
     if url_map is None:
         abort(HTTPStatus.NOT_FOUND)
     return redirect(url_map.original)

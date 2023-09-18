@@ -28,13 +28,13 @@ class URLMap(db.Model):
             short = ''.join(
                 choice(symbols) for _ in range(SHORT_LENGTH)
             )
-            if URLMap.get(custom_id=short):
+            if URLMap.get(short=short):
                 return URLMap.get_unique_short()
             return short
         raise InvalidAPIUsage(SHORT_FAILED)
 
-    def get(custom_id):
-        return URLMap.query.filter_by(short=custom_id).first()
+    def get(short):
+        return URLMap.query.filter_by(short=short).first()
 
     def add(original, short):
         regex = API_REGEX
@@ -47,7 +47,7 @@ class URLMap(db.Model):
         ):
             raise InvalidAPIUsage(NVALID_SHORT)
 
-        if URLMap.get(custom_id=short):
+        if URLMap.get(short=short):
             raise InvalidAPIUsage(
                 NAME_EXISTS.format(short)
             )

@@ -39,7 +39,7 @@ class CutForm(FlaskForm):
 
     def validate_custom_id(self, field):
         if field.data:
-            if URLMap.get(custom_id=field.data) is not None:
+            if URLMap.get(short=field.data) is not None:
                 raise ValidationError(
                     FLASH_NAME_EXISTS.format(field.data)
                 )
