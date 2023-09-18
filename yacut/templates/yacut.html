@@ -42,25 +42,18 @@
           <div class="col-sm">
             <p class="text-center">
               <h5 class="text-center">
-                {% with messages = get_flashed_messages(category_filter = ['short_exists']) %}
+                {% with messages = get_flashed_messages() %}
                   {% if messages %}
                     {% for message in messages %}
                       {{ message }}
                     {% endfor %}
                   {% endif %}
                 {% endwith %}
-                {% with messages = get_flashed_messages(category_filter = ['success_message']) %}
-                  {% if messages %}
-                    {% for message in messages %}
-                      {{ message }}
-                      {% if short_link %}
-                        <p>
-                          <a href="{{ short_link }}">{{ short_link }}</a>
-                        </p>
-                      {% endif %}
-                    {% endfor %}
-                  {% endif %}
-                {% endwith %}
+                {% if short_link %}
+                  <p>
+                    <a href="{{ short_link }}">{{ short_link }}</a>
+                  </p>
+                {% endif %}
               </h5>
             </p>
           </div>

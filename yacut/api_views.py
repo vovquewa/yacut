@@ -1,13 +1,11 @@
-import re
 from http import HTTPStatus
 
 from flask import jsonify, request, url_for
 
-from . import app, db
+from . import app
 from .constants import (REDIRECT_VIEW,)
 from .error_handlers import InvalidAPIUsage
 from .models import URLMap
-from .views import get_unique_short_id
 
 
 API_ID_NOT_FOUND = 'Указанный id не найден'
@@ -17,7 +15,7 @@ API_URL_REQUIRED = '"url" является обязательным полем!'
 
 @app.route('/api/id/<short_url>/', methods=['GET'])
 def get_url(short_url):
-    url_map = URLMap.query.filter_by(short=short_url).first()
+    url_map = URLMap.get(custom_id=short_url)
     if url_map is None:
         raise InvalidAPIUsage(API_ID_NOT_FOUND, HTTPStatus.NOT_FOUND)
     return jsonify(
@@ -35,7 +33,7 @@ def add_url():
     if 'url' not in data or not data.get('url'):
         raise InvalidAPIUsage(API_URL_REQUIRED)
     short_url = (
-        get_unique_short_id()
+        URLMap.get_unique_short_id()
         if not data.get('custom_id') else data.get('custom_id')
     )
     url_map = URLMap.add(
