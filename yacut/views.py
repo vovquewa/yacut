@@ -3,13 +3,10 @@ from http import HTTPStatus
 from flask import abort, flash, redirect, render_template, url_for
 
 from . import app
+from .constants import FLASH_NAME_EXISTS, REDIRECT_VIEW
+from .exceptions import AddShortException
 from .forms import CutForm
 from .models import URLMap
-from .constants import (
-    FLASH_NAME_EXISTS,
-    REDIRECT_VIEW,
-)
-from .exceptions import AddShortException
 
 
 @app.route('/', methods=['GET', 'POST'])

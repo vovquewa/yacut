@@ -3,10 +3,9 @@ from http import HTTPStatus
 from flask import jsonify, request, url_for
 
 from . import app
-from .constants import (REDIRECT_VIEW,)
+from .constants import REDIRECT_VIEW
 from .error_handlers import InvalidAPIUsage
 from .models import URLMap
-
 
 API_ID_NOT_FOUND = 'Указанный id не найден'
 API_BODY_NOT_FOUND = 'Отсутствует тело запроса'

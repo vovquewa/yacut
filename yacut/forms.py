@@ -4,7 +4,8 @@ from wtforms.validators import DataRequired, Length, Optional, Regexp
 
 from .constants import (CUSTOM_ID_MAX_LENGTH, FORMS_CREATE, FORMS_LONG_LINK,
                         FORMS_REQUIRED, FORMS_SHORT_LINK_VALIDATION,
-                        FORMS_YOUR_SHORT_LINK, ORIGINAL_MAX_LENGTH, API_REGEX, FLASH_NAME_EXISTS)
+                        FORMS_YOUR_SHORT_LINK, ORIGINAL_MAX_LENGTH, API_REGEX,
+                        FLASH_NAME_EXISTS)
 from .models import URLMap
 from .exceptions import ValidationError
 

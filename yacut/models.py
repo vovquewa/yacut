@@ -1,10 +1,13 @@
-from datetime import datetime
 import re
-from random import randrange, choice
+from datetime import datetime
+from random import choice
 from string import ascii_letters, digits
 
 from yacut import db
-from .constants import CUSTOM_ID_MAX_LENGTH, ORIGINAL_MAX_LENGTH, API_REGEX, API_INVALID_SHORT, API_NAME_EXISTS, SHORT_LENGTH, MAX_ATTEMPTS, API_SHORT_FAILED
+
+from .constants import (API_INVALID_SHORT, API_NAME_EXISTS, API_REGEX,
+                        API_SHORT_FAILED, CUSTOM_ID_MAX_LENGTH, MAX_ATTEMPTS,
+                        ORIGINAL_MAX_LENGTH, SHORT_LENGTH)
 from .error_handlers import InvalidAPIUsage
 
 
