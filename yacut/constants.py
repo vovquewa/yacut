@@ -1,3 +1,5 @@
+from string import ascii_letters, digits
+
 FLASH_NAME_EXISTS = 'Имя {} уже занято!'
 FLASH_SUCCESS = 'Ваша новая ссылка готова:'
 
@@ -10,7 +12,8 @@ FORMS_CREATE = 'Создать'
 API_INVALID_SHORT = 'Указано недопустимое имя для короткой ссылки'
 API_SHORT_FAILED = 'Не удалось сгенерировать уникальный id'
 API_NAME_EXISTS = 'Имя "{}" уже занято.'
-API_REGEX = '^[0-9a-zA-Z]+$'
+ALLOWED_CHARS = ascii_letters + digits
+API_REGEX = '^[' + ALLOWED_CHARS + ']+$'
 
 CUSTOM_ID_MAX_LENGTH = 16
 ORIGINAL_MAX_LENGTH = 2048
