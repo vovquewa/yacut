@@ -16,7 +16,7 @@ def index_view():
         flash(
             FLASH_NAME_EXISTS.format(form.custom_id.data)
         )
-        return render_template('yacut.html', form=form)
+        return render_template('index.html', form=form)
     if form.validate_on_submit():
         try:
             url_map = URLMap.add(
@@ -26,7 +26,7 @@ def index_view():
         except AddShortException as e:
             abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
         return render_template(
-            'yacut.html',
+            'index.html',
             form=form,
             short_link=url_for(
                 REDIRECT_VIEW,
@@ -34,7 +34,7 @@ def index_view():
                 _external=True
             )
         )
-    return render_template('yacut.html', form=form)
+    return render_template('index.html', form=form)
 
 
 @app.route('/<short_url>')

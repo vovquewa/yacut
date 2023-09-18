@@ -31,19 +31,19 @@ def add_url():
         raise InvalidAPIUsage(API_BODY_NOT_FOUND)
     if 'url' not in data or not data.get('url'):
         raise InvalidAPIUsage(API_URL_REQUIRED)
-    short_url = (
+    short = (
         URLMap.get_unique_short_id()
         if not data.get('custom_id') else data.get('custom_id')
     )
     url_map = URLMap.add(
         original=data['url'],
-        short=short_url
+        short=short
     )
     return jsonify(
         {
             'url': url_map.original,
             'short_link': url_for(
-                REDIRECT_VIEW, short_url=short_url, _external=True
+                REDIRECT_VIEW, short_url=short, _external=True
             )
         }
     ), HTTPStatus.CREATED
