@@ -34,10 +34,8 @@ class URLMap(db.Model):
     def get(short):
         return URLMap.query.filter_by(short=short).first()
 
-    def add(original, short=None, fromform=False):
-        if short is None or short == '':
-            short = URLMap.get_unique_short()
-        if not fromform:
+    def add(original, short=None, additional_validation=False):
+        if not additional_validation and short is not None:
             if len(short) > SHORT_MAX_LENGTH:
                 raise InvalidURLMap(SHORT_UNACCEPTABLE)
             if (
@@ -52,6 +50,8 @@ class URLMap(db.Model):
                 raise InvalidURLMap(
                     NAME_EXISTS.format(short)
                 )
+        if short is None or short == '':
+            short = URLMap.get_unique_short()
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
         db.session.commit()

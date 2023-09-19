@@ -28,10 +28,10 @@ def index_view():
                 ).short,
                 _external=True
             ),
-            fromform=True
+            additional_validation=True
         )
     except InvalidURLMap as e:
-        flash(e.message)
+        flash(e)
         return render_template('index.html', form=form)
 
 
