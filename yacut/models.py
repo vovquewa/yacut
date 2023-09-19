@@ -31,11 +31,12 @@ class URLMap(db.Model):
     def get(short):
         return URLMap.query.filter_by(short=short).first()
 
-    def add(original, short=None):
+    def add(original, short=None, fromform=False):
         if short is None or short == '':
             short = URLMap.get_unique_short()
-        if len(short) > SHORT_MAX_LENGTH:
-            raise InvalidAPIUsage(SHORT_UNACCEPTABLE)
+        if not fromform:
+            if len(short) > SHORT_MAX_LENGTH:
+                raise InvalidAPIUsage(SHORT_UNACCEPTABLE)
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
         db.session.commit()
