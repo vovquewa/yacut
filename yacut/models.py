@@ -11,9 +11,11 @@ from .constants import (
 from .error_handlers import InvalidURLMap
 
 SHORT_FAILED = 'Не удалось сгенерировать уникальный id'
-SHORT_UNACCEPTABLE = 'Указано недопустимое имя для короткой ссылки'
 INVALID_SHORT = 'Указано недопустимое имя для короткой ссылки'
 NAME_EXISTS = 'Имя "{}" уже занято.'
+ORIGINAL_LENGHT_FAILED = (
+    'Длина оригинальной ссылки не может превышать {} символов'
+)
 
 
 class URLMap(db.Model):
@@ -37,8 +39,6 @@ class URLMap(db.Model):
     def add(original, short=None, additional_validation=False):
         if not additional_validation:
             if short:
-                if len(short) > SHORT_MAX_LENGTH:
-                    raise InvalidURLMap(SHORT_UNACCEPTABLE)
                 if (
                     len(short) > SHORT_MAX_LENGTH or
                     not re.match(API_REGEX, short)
@@ -48,7 +48,11 @@ class URLMap(db.Model):
                     raise InvalidURLMap(
                         NAME_EXISTS.format(short)
                     )
-        if not short or short == '':
+        if len(original) > ORIGINAL_MAX_LENGTH:
+            raise InvalidURLMap(
+                ORIGINAL_LENGHT_FAILED.format(ORIGINAL_MAX_LENGTH)
+            )
+        if not short:
             short = URLMap.get_unique_short()
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
