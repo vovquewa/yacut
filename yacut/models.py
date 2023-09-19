@@ -8,7 +8,7 @@ from .constants import (
     ALLOWED_CHARS, API_REGEX, SHORT_MAX_LENGTH, MAX_ATTEMPTS,
     ORIGINAL_MAX_LENGTH, SHORT_LENGTH
 )
-from .error_handlers import InvalidAPIUsage
+from .error_handlers import InvalidURLMap
 
 SHORT_FAILED = 'Не удалось сгенерировать уникальный id'
 SHORT_UNACCEPTABLE = 'Указано недопустимое имя для короткой ссылки'
@@ -29,7 +29,7 @@ class URLMap(db.Model):
             short = ''.join(random.choices(ALLOWED_CHARS, k=SHORT_LENGTH))
             if not URLMap.get(short=short):
                 return short
-        raise InvalidAPIUsage(SHORT_FAILED)
+        raise InvalidURLMap(SHORT_FAILED)
 
     def get(short):
         return URLMap.query.filter_by(short=short).first()
@@ -39,7 +39,7 @@ class URLMap(db.Model):
             short = URLMap.get_unique_short()
         if not fromform:
             if len(short) > SHORT_MAX_LENGTH:
-                raise InvalidAPIUsage(SHORT_UNACCEPTABLE)
+                raise InvalidURLMap(SHORT_UNACCEPTABLE)
             if (
                 short and
                 (
@@ -47,9 +47,9 @@ class URLMap(db.Model):
                     not re.match(API_REGEX, short)
                 )
             ):
-                raise InvalidAPIUsage(INVALID_SHORT)
+                raise InvalidURLMap(INVALID_SHORT)
             if URLMap.get(short=short):
-                raise InvalidAPIUsage(
+                raise InvalidURLMap(
                     NAME_EXISTS.format(short)
                 )
         url_map = URLMap(original=original, short=short)

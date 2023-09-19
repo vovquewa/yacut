@@ -6,7 +6,7 @@ from . import app
 from .constants import REDIRECT_VIEW
 from .forms import CutForm
 from .models import URLMap
-from .error_handlers import InvalidAPIUsage
+from .error_handlers import InvalidURLMap
 
 NAME_EXISTS = 'Имя {} уже занято!'
 
@@ -30,7 +30,7 @@ def index_view():
             ),
             fromform=True
         )
-    except InvalidAPIUsage as e:
+    except InvalidURLMap as e:
         flash(e.message)
         return render_template('index.html', form=form)
 
