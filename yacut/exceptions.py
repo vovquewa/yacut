@@ -1,2 +1,0 @@
-class AddShortException(Exception):
-    pass

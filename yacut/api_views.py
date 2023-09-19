@@ -1,11 +1,10 @@
 from http import HTTPStatus
 
-from flask import abort, jsonify, request, url_for
+from flask import jsonify, request, url_for
 
 from . import app
 from .constants import REDIRECT_VIEW
-from .error_handlers import InvalidAPIUsage
-from .exceptions import AddShortException
+from .error_handlers import InvalidAPIUsage, InvalidURLMap
 from .models import URLMap
 
 ID_NOT_FOUND = 'Указанный id не найден'
@@ -37,16 +36,13 @@ def add_url():
     try:
         url_map = URLMap.add(
             original=data['url'],
-            short=(
-                URLMap.get_unique_short()
-                if not data.get('custom_id') else data.get('custom_id')
-            )
+            short=data.get('custom_id')
         )
-    except AddShortException as e:
-        abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
+    except InvalidURLMap as e:
+        raise InvalidAPIUsage(str(e))
     return jsonify(
         {
-            'url': url_map.original,
+            'url': data['url'],
             'short_link': url_for(
                 REDIRECT_VIEW, short=url_map.short, _external=True
             )
