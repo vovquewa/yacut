@@ -1,12 +1,12 @@
 from http import HTTPStatus
 
-from flask import abort, redirect, render_template, url_for
+from flask import abort, flash, redirect, render_template, url_for
 
 from . import app
 from .constants import REDIRECT_VIEW
-from .exceptions import AddShortException
 from .forms import CutForm
 from .models import URLMap
+from .error_handlers import InvalidAPIUsage
 
 NAME_EXISTS = 'Имя {} уже занято!'
 
@@ -17,21 +17,21 @@ def index_view():
     if not form.validate_on_submit():
         return render_template('index.html', form=form)
     try:
-        url_map = URLMap.add(
-            original=form.original_link.data,
-            short=form.custom_id.data
+        return render_template(
+            'index.html',
+            form=form,
+            short_link=url_for(
+                REDIRECT_VIEW,
+                short=URLMap.add(
+                    original=form.original_link.data,
+                    short=form.custom_id.data
+                ).short,
+                _external=True
+            )
         )
-    except AddShortException as e:
-        abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))
-    return render_template(
-        'index.html',
-        form=form,
-        short_link=url_for(
-            REDIRECT_VIEW,
-            short=url_map.short,
-            _external=True
-        )
-    )
+    except InvalidAPIUsage as e:
+        flash(e.message)
+
 
 
 @app.route('/<short>')
