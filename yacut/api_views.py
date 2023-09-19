@@ -36,25 +36,12 @@ def add_url():
     if 'url' not in data or not data.get('url'):
         raise InvalidAPIUsage(URL_REQUIRED)
     try:
-        short = (
-            URLMap.get_unique_short()
-            if not data.get('custom_id') else data.get('custom_id')
-        )
-        if (
-            short and
-            (
-                len(short) > SHORT_MAX_LENGTH or
-                not re.match(API_REGEX, short)
-            )
-        ):
-            raise InvalidAPIUsage(NVALID_SHORT)
-        if URLMap.get(short=short):
-            raise InvalidAPIUsage(
-                NAME_EXISTS.format(short)
-            )
         url_map = URLMap.add(
             original=data['url'],
-            short=short
+            short=(
+                URLMap.get_unique_short()
+                if not data.get('custom_id') else data.get('custom_id')
+            )
         )
     except AddShortException as e:
         abort(HTTPStatus.INTERNAL_SERVER_ERROR, str(e))

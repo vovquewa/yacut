@@ -27,11 +27,12 @@ def index_view():
                     short=form.custom_id.data
                 ).short,
                 _external=True
-            )
+            ),
+            fromform=True
         )
     except InvalidAPIUsage as e:
         flash(e.message)
-
+        return render_template('index.html', form=form)
 
 
 @app.route('/<short>')
