@@ -1,10 +1,9 @@
 from http import HTTPStatus
-import re
 
 from flask import abort, jsonify, request, url_for
 
 from . import app
-from .constants import REDIRECT_VIEW, API_REGEX, SHORT_MAX_LENGTH
+from .constants import REDIRECT_VIEW
 from .error_handlers import InvalidAPIUsage
 from .exceptions import AddShortException
 from .models import URLMap
