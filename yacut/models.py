@@ -35,22 +35,20 @@ class URLMap(db.Model):
         return URLMap.query.filter_by(short=short).first()
 
     def add(original, short=None, additional_validation=False):
-        if not additional_validation and short is not None:
-            if len(short) > SHORT_MAX_LENGTH:
-                raise InvalidURLMap(SHORT_UNACCEPTABLE)
-            if (
-                short and
-                (
+        if not additional_validation:
+            if short:
+                if len(short) > SHORT_MAX_LENGTH:
+                    raise InvalidURLMap(SHORT_UNACCEPTABLE)
+                if (
                     len(short) > SHORT_MAX_LENGTH or
                     not re.match(API_REGEX, short)
-                )
-            ):
-                raise InvalidURLMap(INVALID_SHORT)
-            if URLMap.get(short=short):
-                raise InvalidURLMap(
-                    NAME_EXISTS.format(short)
-                )
-        if short is None or short == '':
+                ):
+                    raise InvalidURLMap(INVALID_SHORT)
+                if URLMap.get(short=short):
+                    raise InvalidURLMap(
+                        NAME_EXISTS.format(short)
+                    )
+        if not short or short == '':
             short = URLMap.get_unique_short()
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
