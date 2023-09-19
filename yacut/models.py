@@ -1,11 +1,10 @@
 from datetime import datetime
-from random import choice
-from string import ascii_letters, digits
+import random
 
 from yacut import db
 
 from .constants import (
-    SHORT_MAX_LENGTH, MAX_ATTEMPTS,
+    ALLOWED_CHARS, SHORT_MAX_LENGTH, MAX_ATTEMPTS,
     ORIGINAL_MAX_LENGTH, SHORT_LENGTH
 )
 from .error_handlers import InvalidAPIUsage
@@ -22,12 +21,9 @@ class URLMap(db.Model):
     )
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    def get_unique_short(attempts=0):
+    def get_unique_short():
         for _ in range(MAX_ATTEMPTS):
-            symbols = ascii_letters + digits
-            short = ''.join(
-                choice(symbols) for _ in range(SHORT_LENGTH)
-            )
+            short = ''.join(random.choices(ALLOWED_CHARS, k=SHORT_LENGTH))
             if not URLMap.get(short=short):
                 return short
         raise InvalidAPIUsage(SHORT_FAILED)

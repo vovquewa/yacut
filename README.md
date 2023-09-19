@@ -49,6 +49,12 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+## Подготовка базы
+
+```bash
+flask db upgrade
+```
+
 ## Команды запуска
 
 ```bash
@@ -84,18 +90,4 @@ Commands:
   routes  Show the routes for the app.
   run     Run a development server.
   shell   Run a shell in the app context.
-```
-
-## Настройка базы данных
-
-```bash
-flask db init
-```
-
-```bash
-flask db migrate -m "Initial migration."
-```
-
-```bash
-flask db upgrade
 ```
