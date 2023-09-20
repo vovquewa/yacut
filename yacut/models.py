@@ -48,10 +48,10 @@ class URLMap(db.Model):
                     raise InvalidURLMap(
                         NAME_EXISTS.format(short)
                     )
-        if len(original) > ORIGINAL_MAX_LENGTH:
-            raise InvalidURLMap(
-                ORIGINAL_LENGHT_FAILED.format(ORIGINAL_MAX_LENGTH)
-            )
+                if len(original) > ORIGINAL_MAX_LENGTH:
+                    raise InvalidURLMap(
+                        ORIGINAL_LENGHT_FAILED.format(ORIGINAL_MAX_LENGTH)
+                    )
         if not short:
             short = URLMap.get_unique_short()
         url_map = URLMap(original=original, short=short)
